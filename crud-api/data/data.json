@@ -1,4 +1,11 @@
 {
-    "users": [],
-    "nextId": 2
+    "users": [
+        {
+            "name": "Murilo",
+            "age": 18,
+            "email": "mthome.dev@gmail.com",
+            "id": 2
+        }
+    ],
+    "nextId": 3
 }
