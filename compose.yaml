@@ -1,0 +1,18 @@
+services:
+  api:
+    build: ./crud-api
+    container_name: crud-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./crud-api/data:/app/data
+    restart: unless-stopped
+
+  frontend:
+    build: ./crud-frontend-axios
+    container_name: crud-frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - api
+    restart: unless-stopped
