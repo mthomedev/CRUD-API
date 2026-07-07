@@ -3,6 +3,16 @@
 Registro de decisões relevantes, o motivo por trás delas e o que foi
 descartado no caminho. Ordem cronológica (mais recente no topo).
 
+## 2026-07-07 — Manter o lock de arquivo (`flock`) em `crud-api/src/src/data.php`
+
+**Decisão**: rodar as operações em data.php do jeito que estão agora:
+
+1. loadData() → lê o arquivo inteiro, decodifica o JSON pra um array PHP
+2. modifica → em memória (ex: adiciona um usuário, ou dá update)
+3. saveData() → serializa o array de volta e sobrescreve o arquivo inteiro
+
+**Motivo**: esse projeto foi feito com fins acadêmicos e como uma ferramenta de pesquisa e estudos, sem a intenção de ser lançado ou necessidade de ser escalável para produção, não haverá duas requisições simultâneas. O projeto rodará localmente apenas
+
 ---
 
 ## 2026-07-07 — Servidor embutido do PHP em vez de Nginx + PHP-FPM

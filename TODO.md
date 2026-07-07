@@ -21,8 +21,6 @@ remova-o daqui.
 - [ ] Testes automatizados:
   - [ ] PHPUnit para `validation.php` e `services.php`.
   - [ ] Testes de integração para os endpoints da API.
-  - [ ] Testes para `scripts/api/*.js` no frontend.
-- [ ] Paginação em `GET /api/users`.
 - [ ] Loading state no frontend durante chamadas à API (hoje não há
       indicação visual de "carregando").
 - [ ] Mensagens de erro do frontend um pouco mais amigáveis para o usuário
@@ -33,11 +31,9 @@ remova-o daqui.
 - [ ] Trocar o dev server do Vite dentro do Docker por `vite build` + Nginx
       (ver `docs/roadmap.md` — v1.2).
 - [ ] Trocar `php -S` por PHP-FPM + Nginx (ver `docs/roadmap.md` — v1.2).
-- [ ] Variáveis de ambiente para `allowedOrigins` e portas, em vez de
-      valores fixos em `config.php`.
 - [ ] Avaliar migração de `data.json` para SQLite (esquema já esboçado em
       `docs/database.md`).
-- [ ] Autenticação nos endpoints de escrita.
+- [ ] Paginação em `GET /api/users`.
 
 ## Bugs conhecidos
 
