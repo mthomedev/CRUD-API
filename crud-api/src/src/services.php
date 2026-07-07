@@ -25,6 +25,10 @@ function createUser(string $dataFile, ?array $input): array
         return ['error' => $error, 'status' => 400];
     }
 
+    if (findUserByEmail($dataFile, $input['email']) !== null) {
+        return ['error' => 'Email already in use', 'status' => 400];
+    }
+
     $user = insertUser($dataFile, [
         'name' => trim($input['name']),
         'age' => (int) $input['age'],
@@ -54,6 +58,10 @@ function editUser(string $dataFile, ?int $id, ?array $input, bool $partial = fal
     $error = validateUserFields($input);
     if ($error) {
         return ['error' => $error, 'status' => 400];
+    }
+
+    if (isset($input['email']) && findUserByEmail($dataFile, $input['email'], $id) !== null) {
+        return ['error' => 'Email already in use', 'status' => 400];
     }
 
     $allowed = ['name', 'age', 'email'];
