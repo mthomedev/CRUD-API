@@ -11,8 +11,6 @@ remova-o daqui.
       revisada manualmente, mas sem acesso à internet no ambiente onde foi
       criada — rodar `docker compose up --build` de verdade e confirmar que
       os dois serviços sobem e conversam entre si.
-- [ ] Adicionar lock de arquivo (`flock`) em `crud-api/src/src/data.php`
-      para evitar corrupção/perda de dados em escritas concorrentes.
 - [ ] Validar duplicidade de e-mail no `POST`/`PUT`/`PATCH` (hoje dois
       usuários podem ter o mesmo e-mail).
 
