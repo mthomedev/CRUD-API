@@ -79,7 +79,6 @@ Complete-CRUD/
 │   ├── architecture.md       # arquitetura e camadas do projeto
 │   ├── current_task.md       # o que está em desenvolvimento agora
 │   ├── decisions.md          # decisões técnicas e motivos
-│   ├── roadmap.md            # funcionalidades e versões futuras
 │   ├── storage.md            # persistência (data.json)
 │   ├── api.md                # contratos da API (endpoints, payloads)
 │   └── database.md           # esquema do "banco" (arquivo JSON)

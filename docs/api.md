@@ -34,12 +34,12 @@ Requisições de outras origens não recebem o header
 }
 ```
 
-| Campo | Tipo | Regras |
-|---|---|---|
-| `id` | `int` | Gerado pelo servidor. Nunca enviado pelo cliente. |
-| `name` | `string` | Obrigatório na criação. Não pode ser vazio (após `trim`). Máximo 100 caracteres. |
-| `age` | `int` | Obrigatório na criação. Numérico, entre 1 e 150. |
-| `email` | `string` | Obrigatório na criação. Deve ser um e-mail válido (`filter_var(FILTER_VALIDATE_EMAIL)`). **Sem checagem de duplicidade.** |
+| Campo   | Tipo     | Regras                                                                                                                                                                         |
+| ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `id`    | `int`    | Gerado pelo servidor. Nunca enviado pelo cliente.                                                                                                                              |
+| `name`  | `string` | Obrigatório na criação. Não pode ser vazio (após `trim`). Máximo 100 caracteres.                                                                                               |
+| `age`   | `int`    | Obrigatório na criação. Numérico, entre 1 e 150.                                                                                                                               |
+| `email` | `string` | Obrigatório na criação. Deve ser um e-mail válido (`filter_var(FILTER_VALIDATE_EMAIL)`). **Único entre os usuários** (comparação case-insensitive); duplicidade retorna `400`. |
 
 ---
 
@@ -108,6 +108,15 @@ Outras mensagens possíveis de validação: `"Name cannot be empty"`,
 `"Name must be at most 100 characters"`, `"Age must be a number"`,
 `"Invalid email format"`, `"Invalid JSON body"` (corpo não é um JSON válido).
 
+**Response — 400 Bad Request** (e-mail já cadastrado)
+
+```json
+{ "error": "Email already in use" }
+```
+
+Comparação de e-mail é case-insensitive (`maria@mail.com` e
+`Maria@Mail.com` são tratados como o mesmo e-mail).
+
 **Exemplo (curl)**
 
 ```bash
@@ -138,8 +147,10 @@ são obrigatórios no corpo, mesmo os que não mudaram.
 ```
 
 **Response — 400 Bad Request**: `id` ausente (`"User id is required"`),
-corpo inválido, ou campo obrigatório faltando/inválido (mesmas mensagens do
-`POST`).
+corpo inválido, campo obrigatório faltando/inválido, ou e-mail já usado por
+outro usuário (mesmas mensagens do `POST`, incluindo
+`"Email already in use"`). A checagem de duplicidade ignora o próprio
+usuário sendo editado.
 
 **Response — 404 Not Found**
 
@@ -177,7 +188,9 @@ Atualiza **parcialmente** um usuário — só os campos enviados são alterados.
 
 **Response — 400 / 404**: mesmas regras do `PUT`, exceto que campos
 ausentes no corpo não geram erro de "obrigatório" (só os campos
-efetivamente enviados são validados).
+efetivamente enviados são validados). A checagem de duplicidade de e-mail
+(`"Email already in use"`) só é feita se o campo `email` for enviado no
+corpo.
 
 **Exemplo (curl)**
 
@@ -203,7 +216,14 @@ Remove um usuário.
 **Response — 200 OK**
 
 ```json
-{ "deleted": { "id": 1, "name": "Maria Silva", "age": 31, "email": "maria@example.com" } }
+{
+  "deleted": {
+    "id": 1,
+    "name": "Maria Silva",
+    "age": 31,
+    "email": "maria@example.com"
+  }
+}
 ```
 
 **Response — 400 Bad Request**

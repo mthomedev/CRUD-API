@@ -23,6 +23,19 @@ function findUserById(string $dataFile, int $id): ?array
     return null;
 }
 
+function findUserByEmail(string $dataFile, string $email, ?int $excludeId = null): ?array
+{
+    $data = loadData($dataFile);
+
+    foreach ($data['users'] as $user) {
+        if (strcasecmp($user['email'], $email) === 0 && $user['id'] !== $excludeId) {
+            return $user;
+        }
+    }
+
+    return null;
+}
+
 function insertUser(string $dataFile, array $user): array
 {
     $data = loadData($dataFile);

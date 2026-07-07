@@ -11,7 +11,7 @@ remova-o daqui.
       revisada manualmente, mas sem acesso à internet no ambiente onde foi
       criada — rodar `docker compose up --build` de verdade e confirmar que
       os dois serviços sobem e conversam entre si.
-- [ ] Validar duplicidade de e-mail no `POST`/`PUT`/`PATCH` (hoje dois
+- [x] Validar duplicidade de e-mail no `POST`/`PUT`/`PATCH` (hoje dois
       usuários podem ter o mesmo e-mail).
 
 ## Prioridade média
