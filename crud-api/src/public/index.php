@@ -1,5 +1,11 @@
 <?php
 
+// index.php — adicionar no topo, antes de qualquer lógica
+$requestedFile = __DIR__ . $_SERVER['REQUEST_URI'];
+if ($_SERVER['REQUEST_URI'] !== '/' && file_exists($requestedFile) && is_file($requestedFile)) {
+    return false; // php -S serve o arquivo estático diretamente
+}
+
 require_once __DIR__ . '/../config/config.php';
 // require_once __DIR__ . '/openapi.php';
 

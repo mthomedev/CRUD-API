@@ -1,0 +1,307 @@
+openapi: 3.0.3
+
+info:
+  title: CRUD API — Usuários
+  version: 1.0.0
+  description: |
+    API REST para gerenciamento de usuários. Todos os endpoints ficam sob
+    `/api/users`; o método HTTP determina a operação.
+
+servers:
+  - url: http://localhost:8000
+    description: Local / Docker
+
+paths:
+  /api/users:
+    get:
+      summary: Listar usuários
+      description: Retorna todos os usuários cadastrados.
+      operationId: getUsers
+      responses:
+        "200":
+          description: Lista de usuários
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
+              example:
+                users:
+                  - id: 1
+                    name: Maria Silva
+                    age: 30
+                    email: maria@example.com
+                  - id: 2
+                    name: João Souza
+                    age: 25
+                    email: joao@example.com
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    post:
+      summary: Criar usuário
+      description: Cria um novo usuário. Todos os campos são obrigatórios.
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserInput"
+            example:
+              name: Maria Silva
+              age: 30
+              email: maria@example.com
+      responses:
+        "201":
+          description: Usuário criado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+              example:
+                id: 1
+                name: Maria Silva
+                age: 30
+                email: maria@example.com
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    put:
+      summary: Substituir usuário (PUT)
+      description: |
+        Substitui **todos** os campos de um usuário. Os três campos (`name`,
+        `age`, `email`) são obrigatórios no corpo, mesmo os que não mudaram.
+      operationId: putUser
+      parameters:
+        - $ref: "#/components/parameters/UserId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserInput"
+            example:
+              name: Maria Silva
+              age: 31
+              email: maria@example.com
+      responses:
+        "200":
+          description: Usuário atualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+              example:
+                id: 1
+                name: Maria Silva
+                age: 31
+                email: maria@example.com
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    patch:
+      summary: Atualizar usuário parcialmente (PATCH)
+      description: |
+        Atualiza apenas os campos enviados no corpo. Qualquer subconjunto de
+        `name`, `age` e `email` é aceito. Retorna o usuário completo já
+        atualizado.
+      operationId: patchUser
+      parameters:
+        - $ref: "#/components/parameters/UserId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserPatch"
+            example:
+              age: 31
+      responses:
+        "200":
+          description: Usuário atualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+              example:
+                id: 1
+                name: Maria Silva
+                age: 31
+                email: maria@example.com
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    delete:
+      summary: Remover usuário
+      description: Remove o usuário com o `id` informado.
+      operationId: deleteUser
+      parameters:
+        - $ref: "#/components/parameters/UserId"
+      responses:
+        "200":
+          description: Usuário removido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deleted:
+                    $ref: "#/components/schemas/User"
+              example:
+                deleted:
+                  id: 1
+                  name: Maria Silva
+                  age: 31
+                  email: maria@example.com
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Gerado pelo servidor. Nunca enviado pelo cliente.
+          example: 1
+        name:
+          type: string
+          maxLength: 100
+          example: Maria Silva
+        age:
+          type: integer
+          minimum: 1
+          maximum: 150
+          example: 30
+        email:
+          type: string
+          format: email
+          example: maria@example.com
+      required:
+        - id
+        - name
+        - age
+        - email
+
+    UserInput:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          description: Não pode ser vazio após trim. Máximo 100 caracteres.
+          example: Maria Silva
+        age:
+          type: integer
+          minimum: 1
+          maximum: 150
+          example: 30
+        email:
+          type: string
+          format: email
+          description: Deve ser único (comparação case-insensitive).
+          example: maria@example.com
+      required:
+        - name
+        - age
+        - email
+
+    UserPatch:
+      type: object
+      description: Qualquer subconjunto de name, age e email.
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          example: Maria Silva
+        age:
+          type: integer
+          minimum: 1
+          maximum: 150
+          example: 31
+        email:
+          type: string
+          format: email
+          example: maria@example.com
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: User not found
+      required:
+        - error
+
+  parameters:
+    UserId:
+      name: id
+      in: query
+      required: true
+      description: Identificador do usuário.
+      schema:
+        type: integer
+        example: 1
+
+  responses:
+    BadRequest:
+      description: Requisição inválida
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          examples:
+            campoFaltando:
+              summary: Campo obrigatório ausente
+              value:
+                error: "age, email are required"
+            emailDuplicado:
+              summary: E-mail já cadastrado
+              value:
+                error: "Email already in use"
+            idAusente:
+              summary: ID não informado
+              value:
+                error: "User id is required"
+            jsonInvalido:
+              summary: Corpo não é JSON válido
+              value:
+                error: "Invalid JSON body"
+
+    NotFound:
+      description: Usuário não encontrado
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error: User not found
+
+    InternalError:
+      description: Erro interno do servidor
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error: Internal server error
