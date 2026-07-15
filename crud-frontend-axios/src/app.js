@@ -12,7 +12,7 @@ import { createUser } from "./scripts/api/create.js";
 import { updateUser } from "./scripts/api/update.js";
 import { deleteUser } from "./scripts/api/delete.js";
 
-const apiUrl = "http://localhost:8000/api/users";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const form = document.getElementById("create-user-form");
 const cancelBtn = document.getElementById("cancel-edit");
