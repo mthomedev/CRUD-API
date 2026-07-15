@@ -33,7 +33,9 @@ export async function updateUser(apiUrl, id, user, originalUser) {
 
   if (Object.keys(changedFields).length === 0) return null;
 
-  const allChanged = Object.keys(changedFields).length === 3;
+  const totalFields = Object.keys(user).length;
+  const allChanged = Object.keys(changedFields).length === totalFields;
+
   if (allChanged) {
     return putUser(apiUrl, id, user);
   } else {
