@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerenciador de Usuários</title>
+    <script type="module" crossorigin src="/assets/index-Bmc7XCWi.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DQyopFwV.css">
+  </head>
+  <body>
+    <main class="container">
+      <h1>Gerenciador de Usuários</h1>
+
+      <section class="form-section">
+        <h2 id="form-title">Create User</h2>
+        <form id="create-user-form" novalidate>
+          <label for="name">Nome</label>
+          <input type="text" id="name" name="name" required />
+
+          <label for="age">Idade</label>
+          <input type="number" id="age" name="age" min="1" max="150" required />
+
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" required />
+
+          <p id="form-error" class="error d-none"></p>
+
+          <div class="form-actions">
+            <button type="submit">Create</button>
+            <button type="button" id="cancel-edit" style="display: none">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section id="users" class="users"></section>
+    </main>
+
+  </body>
+</html>

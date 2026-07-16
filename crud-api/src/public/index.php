@@ -1,6 +1,5 @@
 <?php
 
-// index.php — adicionar no topo, antes de qualquer lógica
 $requestedFile = __DIR__ . $_SERVER['REQUEST_URI'];
 if ($_SERVER['REQUEST_URI'] !== '/' && file_exists($requestedFile) && is_file($requestedFile)) {
     return false; // php -S serve o arquivo estático diretamente
@@ -13,8 +12,8 @@ $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
 in_array($origin, $allowedOrigins) ?
     header("Access-Control-Allow-Origin: $origin") : null;
-header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);

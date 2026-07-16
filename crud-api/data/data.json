@@ -1,17 +1,4 @@
 {
-    "users": [
-        {
-            "name": "Murilo",
-            "age": 18,
-            "email": "mthome.dev@gmail.com",
-            "id": 2
-        },
-        {
-            "name": "Claudio",
-            "age": 31,
-            "email": "claudio@example.com",
-            "id": 3
-        }
-    ],
-    "nextId": 4
+    "users": [],
+    "nextId": 5
 }
