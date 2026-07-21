@@ -1,27 +1,30 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gerenciador de Usuários</title>
+    <title>User Manager</title>
     <link rel="stylesheet" href="./styles/reset.css" />
     <link rel="stylesheet" href="./styles/style.css" />
   </head>
   <body>
     <main class="container">
-      <h1>Gerenciador de Usuários</h1>
+      <h1>User Manager</h1>
 
       <section class="form-section">
         <h2 id="form-title">Create User</h2>
         <form id="create-user-form" novalidate>
-          <label for="name">Nome</label>
+          <label for="name">Name</label>
           <input type="text" id="name" name="name" required />
+          <span id="name-error" class="field-error"></span>
 
-          <label for="age">Idade</label>
+          <label for="age">Age</label>
           <input type="number" id="age" name="age" min="1" max="150" required />
+          <span id="age-error" class="field-error"></span>
 
           <label for="email">E-mail</label>
           <input type="email" id="email" name="email" required />
+          <span id="email-error" class="field-error"></span>
 
           <p id="form-error" class="error d-none"></p>
 
@@ -35,6 +38,18 @@
       </section>
 
       <section id="users" class="users"></section>
+
+      <div id="toast-container" class="toast-container"></div>
+
+      <div id="confirm-modal" class="modal-overlay d-none">
+        <div class="modal">
+          <p id="confirm-message"></p>
+          <div class="modal-actions">
+            <button id="confirm-cancel" class="btn-secondary">Cancel</button>
+            <button id="confirm-ok" class="btn-danger">Delete</button>
+          </div>
+        </div>
+      </div>
     </main>
 
     <script type="module" src="./app.js"></script>

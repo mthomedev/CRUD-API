@@ -1,7 +1,16 @@
 <?php
 
-$requestedFile = __DIR__ . $_SERVER['REQUEST_URI'];
-if ($_SERVER['REQUEST_URI'] !== '/' && file_exists($requestedFile) && is_file($requestedFile)) {
+$uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$publicRoot = realpath(__DIR__);
+$requestedFile = $uriPath !== null ? realpath($publicRoot . $uriPath) : false;
+
+$isSafeStaticFile = $uriPath !== '/'
+    && $requestedFile !== false
+    && $publicRoot !== false
+    && str_starts_with($requestedFile, $publicRoot . DIRECTORY_SEPARATOR)
+    && is_file($requestedFile);
+
+if ($isSafeStaticFile) {
     return false; // php -S serve o arquivo estático diretamente
 }
 

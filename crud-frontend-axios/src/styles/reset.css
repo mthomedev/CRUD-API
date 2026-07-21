@@ -1,8 +1,14 @@
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-body, h1, h2, p, form {
+body,
+h1,
+h2,
+p,
+form {
   margin: 0;
 }
 

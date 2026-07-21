@@ -2,7 +2,25 @@
 
 function loadData(string $dataFile): array
 {
-    return json_decode(file_get_contents($dataFile), true);
+    if (!file_exists($dataFile)) {
+        return ['users' => [], 'nextId' => 1];
+    }
+
+    $contents = file_get_contents($dataFile);
+
+    if ($contents === false) {
+        throw new \RuntimeException("Unable to read data file: {$dataFile}");
+    }
+
+    $data = json_decode($contents, true);
+
+    if (!is_array($data) || !isset($data['users']) || !is_array($data['users'])) {
+        throw new \RuntimeException("Corrupted data file: {$dataFile}");
+    }
+
+    $data['nextId'] ??= 1;
+
+    return $data;
 }
 
 function saveData(string $dataFile, array $data): void

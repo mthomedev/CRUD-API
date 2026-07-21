@@ -8,6 +8,7 @@ export function findUserById(id) {
 
 export async function renderUsers(apiUrl) {
   const usersSection = document.getElementById("users");
+  usersSection.innerHTML = `<p class="loading">Loading users...</p>`;
 
   try {
     cachedUsers = await getUsers(apiUrl);
@@ -17,7 +18,7 @@ export async function renderUsers(apiUrl) {
   }
 
   if (cachedUsers.length === 0) {
-    usersSection.innerHTML = `<p class="empty">Nenhum usuário cadastrado.</p>`;
+    usersSection.innerHTML = `<p class="empty">No users found.</p>`;
     return;
   }
 
@@ -27,12 +28,12 @@ export async function renderUsers(apiUrl) {
         <article class="user-card" id="${user.id}">
           <div class="user-info">
             <strong>${escapeHtml(user.name)}</strong>
-            <span>${escapeHtml(String(user.age))} anos</span>
+            <span>${escapeHtml(String(user.age))} years old</span>
             <span>${escapeHtml(user.email)}</span>
           </div>
           <div class="user-actions">
-            <button type="button" data-action="edit">Editar</button>
-            <button type="button" data-action="delete">Excluir</button>
+            <button type="button" data-action="edit">Edit</button>
+            <button type="button" data-action="delete">Delete</button>
           </div>
         </article>
       `,

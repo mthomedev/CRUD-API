@@ -11,6 +11,9 @@ import {
 import { createUser } from "./scripts/api/create.js";
 import { updateUser } from "./scripts/api/update.js";
 import { deleteUser } from "./scripts/api/delete.js";
+import { showToast } from "./scripts/dom/toast.js";
+import { validateField, validateAll } from "./scripts/dom/form.js";
+import { confirmAction } from "./scripts/dom/confirm.js";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -27,14 +30,18 @@ usersSection.addEventListener("click", async (event) => {
 
   if (target.dataset.action === "delete") {
     const user = getUserFromCard(target);
-    if (!confirm("Are you sure you want to delete this user?")) return;
+    const confirmed = await confirmAction(
+      `Are you sure you want to delete "${user.name}"?`,
+    );
+    if (!confirmed) return;
 
     try {
       await deleteUser(apiUrl, user.id);
       if (getEditingId() === user.id) exitEditMode();
       renderUsers(apiUrl);
+      showToast("User deleted!");
     } catch (error) {
-      showError(error.message);
+      showToast(error.message, "error");
     }
   }
 });
@@ -42,14 +49,25 @@ usersSection.addEventListener("click", async (event) => {
 document.addEventListener("DOMContentLoaded", () => renderUsers(apiUrl));
 cancelBtn.addEventListener("click", exitEditMode);
 
+["name", "age", "email"].forEach((field) => {
+  document
+    .getElementById(field)
+    .addEventListener("blur", () => validateField(field));
+});
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
+  if (!validateAll()) return;
 
   const name = document.getElementById("name").value;
   const age = document.getElementById("age").value;
   const email = document.getElementById("email").value;
-
   hideError();
+
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Salvando...";
 
   try {
     const editingId = getEditingId();
@@ -73,6 +91,13 @@ form.addEventListener("submit", async (event) => {
     exitEditMode();
     renderUsers(apiUrl);
   } catch (error) {
-    showError(error.message);
+    showToast(error.message, "error");
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
   }
 });
+
+showToast(editingId !== null ? "User updated!" : "User created!");
+
+showToast(error.message, "error");
